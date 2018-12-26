@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase.js"></script>
+</head>
+<body>
+    <h1 id="friend1"></h1>
+    <h1 id="friend2"></h1>
+</body>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyD7YAdZUxa4BcIxC9LOBrKDifehFgXAMWY",
+        authDomain: "nodejspractice-ef537.firebaseapp.com",
+        databaseURL: "https://nodejspractice-ef537.firebaseio.com",
+        projectId: "nodejspractice-ef537",
+        storageBucket: "nodejspractice-ef537.appspot.com",
+        messagingSenderId: "418780553811"
+    };
+    firebase.initializeApp(config);
+
+    var database = firebase.database();
+
+    //假如資料庫內已經有此資料
+    //database.ref("myFriends").set({friend1:"Tom", friend2:"John"});
+
+    var myFriends = database.ref("myFriends");
+
+    //.once 讀取一次資料庫的資料
+    //.on 隨時監聽
+    myFriends.once("value", (snapshop) => {
+        //snapshop 抓到value後回傳function的Obj格式內容
+        console.log("snapshop: ", snapshop);
+        
+        //snapshop.val() 該 key 的val
+        var friends = snapshop.val();
+        console.log(typeof(friends));
+        
+        document.getElementById("friend1").innerHTML = friends.friend1;
+        document.getElementById("friend2").innerHTML = friends.friend2;
+    })
+
+
+</script>
+</html>

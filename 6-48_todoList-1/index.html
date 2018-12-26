@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase.js"></script>
+</head>
+<body>
+    <div id="wrap">
+        <input class="inputTxt" type="text" placeholder="請輸入備忘錄">
+        <input class="send" type="button" value="Send">
+        <ul class="list"></ul>
+    </div>
+    <br/>
+    <div>------- Show firebase data (All) --------</div>
+    <!-- <pre> 標籤是顯示所有空白換行等 -->
+    <pre id="showFirebaseData"></pre>
+    
+</body>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyD7YAdZUxa4BcIxC9LOBrKDifehFgXAMWY",
+        authDomain: "nodejspractice-ef537.firebaseapp.com",
+        databaseURL: "https://nodejspractice-ef537.firebaseio.com",
+        projectId: "nodejspractice-ef537",
+        storageBucket: "nodejspractice-ef537.appspot.com",
+        messagingSenderId: "418780553811"
+    };
+    firebase.initializeApp(config);
+    var database = firebase.database();
+    var ref = firebase.database().ref();
+    var refTodos = firebase.database().ref("todos");
+
+    //Show firebase in screen
+    ref.on("value", (snapshot) => {
+        var preTag = document.getElementById("showFirebaseData");
+        //從根目錄取出data Obj
+        //將Obj 轉成Str (JSON.stringify) 在用 參數3設定間距3 
+        preTag.textContent = JSON.stringify(snapshot.val(), null, 3);
+    });
+
+
+
+    //Get dom
+    var inputTxt = document.querySelector(".inputTxt");
+    var sendBtn = document.querySelector(".send");
+    var list = document.querySelector(".list");
+
+    //按Send 把資料寫進Firebase
+    sendBtn.addEventListener("click", (e)=>{
+        console.log("inputTxt: ", inputTxt.value);
+        if(inputTxt.value.trim() === "") return false;
+
+        refTodos.push( {content: inputTxt.value.trim()} );
+    });
+
+    //從Firebase get data 顯示至html
+    refTodos.on("value", (snapshot)=>{
+        var listHTML = '';
+        var data = snapshot.val();
+        for(var item in data){
+            listHTML += `<li>${data[item].content}</li>`;
+        }
+        console.log("listHTML: ", listHTML);
+        list.innerHTML = listHTML;
+    });
+
+
+
+
+
+
+</script>
+</html>

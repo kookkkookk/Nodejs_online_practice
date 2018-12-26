@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase.js"></script>
+</head>
+<body>
+    <div id="wrap">
+        <h1 id="title"></h1>
+    </div>
+    <!-- <pre> 標籤是顯示所有空白換行等 -->
+    <pre id="showFirebaseData"></pre>
+    
+</body>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyD7YAdZUxa4BcIxC9LOBrKDifehFgXAMWY",
+        authDomain: "nodejspractice-ef537.firebaseapp.com",
+        databaseURL: "https://nodejspractice-ef537.firebaseio.com",
+        projectId: "nodejspractice-ef537",
+        storageBucket: "nodejspractice-ef537.appspot.com",
+        messagingSenderId: "418780553811"
+    };
+    firebase.initializeApp(config);
+
+    var database = firebase.database();
+
+    //假如目前已有以下資料
+    //database.ref("text").set("我是wrap裡面要開發的內容，下面是wrap以外顯示firebase內容，方便開發。");
+    //database.ref("myFriends").set({friend1:"Tom", friend2:"John"});
+
+
+    var ref = database.ref();
+    //使用.on 持續偵聽，才會即時修改
+    ref.on("value", (snapshot)=>{
+        var preTag = document.getElementById("showFirebaseData");
+        //從根目錄取出data Obj
+        //將Obj 轉成Str (JSON.stringify) 在用 參數3設定間距3 
+        preTag.textContent = JSON.stringify(snapshot.val(), null, 3);
+    });
+
+    
+    var _title = database.ref().child("text");
+    _title.once("value", (snapshot)=>{
+        document.getElementById("title").textContent = snapshot.val();
+    });
+
+    
+
+
+</script>
+</html>

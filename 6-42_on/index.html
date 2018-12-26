@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase.js"></script>
+</head>
+<body>
+    <h1 id="title"></h1>
+</body>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyD7YAdZUxa4BcIxC9LOBrKDifehFgXAMWY",
+        authDomain: "nodejspractice-ef537.firebaseapp.com",
+        databaseURL: "https://nodejspractice-ef537.firebaseio.com",
+        projectId: "nodejspractice-ef537",
+        storageBucket: "nodejspractice-ef537.appspot.com",
+        messagingSenderId: "418780553811"
+    };
+    firebase.initializeApp(config);
+
+    var database = firebase.database();
+
+    //假如資料庫內已經有此資料
+    database.ref("myName").set("Ben");
+
+    var myName = database.ref("myName");
+
+    //.once 讀取一次資料庫的資料
+    //.on 隨時監聽
+    myName.on("value", (snapshop) => {
+        //snapshop 抓到value後回傳function的Obj格式內容
+        //console.log("snapshop: ", snapshop);
+        
+        //snapshop.val() 該 key 的val
+        var title = snapshop.val();
+        document.getElementById("title").innerHTML = title;
+    })
+
+
+</script>
+</html>

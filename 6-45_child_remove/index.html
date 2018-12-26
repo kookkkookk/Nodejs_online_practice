@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase.js"></script>
+</head>
+<body>
+    <h1 id="title"></h1>
+</body>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyD7YAdZUxa4BcIxC9LOBrKDifehFgXAMWY",
+        authDomain: "nodejspractice-ef537.firebaseapp.com",
+        databaseURL: "https://nodejspractice-ef537.firebaseio.com",
+        projectId: "nodejspractice-ef537",
+        storageBucket: "nodejspractice-ef537.appspot.com",
+        messagingSenderId: "418780553811"
+    };
+    firebase.initializeApp(config);
+
+    var database = firebase.database();
+
+    //假如目前已有以下兩筆資料
+    //database.ref("myName").push("Ben");
+    //database.ref("myFiends").push({friend1:"Tom", friend2:"John"});
+
+    // .child() 像是jquery的選擇器。 以下意思為.ref()根目錄 > 底下的"myName" > .remove()移除這整筆資料
+    database.ref().child("myName").remove();
+
+
+</script>
+</html>

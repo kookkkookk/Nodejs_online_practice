@@ -1,0 +1,11 @@
+{
+  "name": "test_npm_init",
+  "version": "0.0.1",
+  "description": "This is test use npm create package.json",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ben Wu",
+  "license": "ISC"
+}

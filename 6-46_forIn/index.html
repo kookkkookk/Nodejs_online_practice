@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    var arrayList = [
+        {
+            text: "Im first"
+        },
+        {
+            text: "Im second"
+        },
+        {
+            text: "Im third"
+        }
+    ];
+
+    var objLits = {
+        friend1: {
+            father: "Leon",
+            monther: "Ada"
+        },
+        friend2: {
+            father: "Jack",
+            monther: "Shirley"
+        }
+    };
+
+    //Array的 for in
+    for(var item in arrayList){
+        console.log("索引: ", item);
+        console.log("陣列[索引]: ", arrayList[item].text);
+    }
+
+    console.log("------------");
+
+    //Object 的for in
+    for(var idx in objLits){
+        console.log("索引: ", idx);
+        console.log("物件[索引]: ", objLits[idx].monther);
+        
+    }
+</script>
+</html>

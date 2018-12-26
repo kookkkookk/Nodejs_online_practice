@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyD7YAdZUxa4BcIxC9LOBrKDifehFgXAMWY",
+            authDomain: "nodejspractice-ef537.firebaseapp.com",
+            databaseURL: "https://nodejspractice-ef537.firebaseio.com",
+            projectId: "nodejspractice-ef537",
+            storageBucket: "nodejspractice-ef537.appspot.com",
+            messagingSenderId: "418780553811"
+        };
+        firebase.initializeApp(config);
+
+        //測試是否串聯成功
+        var database = firebase.database();
+        //console.log(database);
+
+        /*
+        //----- 6-36 -----
+        //.ref()是路徑，但我們目前沒有資料，所以 空() 是指database的根目錄
+        //.set()是指寫入一筆資料進去
+        database.ref().set("hi");
+        database.ref().set({first:"Im first"});
+
+        var Obj = {
+            first: "Im first",
+            second: "Im second",
+            third: "Im third"
+        }
+        //但目前每一次set資料，上一次set就會被複寫掉
+        database.ref().set(Obj);
+        */
+
+        /*
+        //----- 6-37 -----
+        //Firebase只能set Obj格式資料，不能使用Array
+
+        //Test.  可以至Firebase查看結果，會自動被拆成Obj格式
+        //database.ref().set(["first","second","third"]);
+        
+        //寫入兩筆Obj資料
+        var students = {
+            student1: {
+                name: "Tom",
+                num: 1
+            },
+            student2: {
+                name: "John",
+                num: 2
+            }
+        }
+        database.ref().set(students);
+
+        //指定路徑修改內容
+        database.ref("student1/name").set("Marry");
+        */
+
+        //----- 6-38 -----
+        //練習寫結構較深層的結構
+        var restaurant = {
+            food:{
+                sandwich: {
+                    beef: {
+                        price: 50
+                    },
+                    chicken: {
+                        price: 40
+                    },
+                    pork: {
+                        price: 40
+                    },
+                    fishMeat: {
+                        price: 50
+                    },
+                    generalSeaFood: {
+                        price: 80
+                    }
+                },
+                burger: {
+                    beef: {
+                        price: 50
+                    },
+                    chicken: {
+                        price: 40
+                    },
+                    bacon: {
+                        price: 45
+                    },
+                    fishMeat: {
+                        price: 50
+                    },
+                    generalSeaFood: {
+                        price: 80
+                    }
+                },
+            },
+            drink: {
+                coke: {
+                    small: {
+                        capacity: "300ml",
+                        price: 20
+                    },
+                    moddle: {
+                        capacity: "600ml",
+                        price: 30
+                    },
+                    large: {
+                        capacity: "1000ml",
+                        price: 45
+                    }
+                },
+                appleJuice: {
+                    small: {
+                        capacity: "300ml",
+                        price: 35
+                    },
+                    moddle: {
+                        capacity: "600ml",
+                        price: 60
+                    }
+                },
+                coffee: {
+                    americanCoffee: {
+                        small: {
+                            capacity: "200ml",
+                            price: 30
+                        },
+                        moddle: {
+                            capacity: "500ml",
+                            price: 50
+                        }
+                    },
+                    latte: {
+                        small: {
+                            capacity: "200ml",
+                            price: 35
+                        },
+                        moddle: {
+                            capacity: "500ml",
+                            price: 55
+                        }
+                    }
+                }
+            }
+        }
+        database.ref().set(restaurant);
+        
+        
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
