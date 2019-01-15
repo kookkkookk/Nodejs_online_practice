@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+        開始時間：<br>
+        <input type="date" id="time" value="">
+        <input type="button" id="send" value="送出">
+
+    <script>
+        var time = document.getElementById('time');
+        var send = document.getElementById('send');
+
+        send.addEventListener('click',function(e){
+            console.log(time.value);
+            var now = new Date(time.value);
+
+            //setHours 可以將該VAR的時間 設定 (時,分,秒,毫秒) ps毫秒 max:999
+            var startTime = now.setHours(0,0,0,0);
+            console.log(startTime)
+            var endTime = now.setHours(23,59,59,999);
+            console.log(endTime)
+
+
+            //這樣就可以使用 startAt() endAt() 搜尋資料庫區間的時間
+        });
+    </script>
+</body>
+</html>

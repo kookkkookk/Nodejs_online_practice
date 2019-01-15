@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase.js"></script>
+</head>
+
+<body>
+    <div id="wrap">
+
+    </div>
+    <br />
+    <div>------- Show firebase data (All) --------</div>
+    <!-- <pre> 標籤是顯示所有空白換行等 -->
+    <pre id="showFirebaseData"></pre>
+
+</body>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyD7YAdZUxa4BcIxC9LOBrKDifehFgXAMWY",
+        authDomain: "nodejspractice-ef537.firebaseapp.com",
+        databaseURL: "https://nodejspractice-ef537.firebaseio.com",
+        projectId: "nodejspractice-ef537",
+        storageBucket: "nodejspractice-ef537.appspot.com",
+        messagingSenderId: "418780553811"
+    };
+    firebase.initializeApp(config);
+    var database = firebase.database();
+    var ref = firebase.database().ref();
+    var refTodos = firebase.database().ref("todos");
+
+    //Show firebase in screen
+    ref.on("value", (snapshot) => {
+        var preTag = document.getElementById("showFirebaseData");
+        //從根目錄取出data Obj
+        //將Obj 轉成Str (JSON.stringify) 在用 參數3設定間距3 
+        preTag.textContent = JSON.stringify(snapshot.val(), null, 3);
+    });
+
+    //假如目前已有以下資料
+    var people = {
+        Ben: {
+            age: 28,
+            height: 180,
+            weight: 73,
+            abc: 4,
+            money: 20000,
+            email: "kook@aa.cc"
+        },
+        Alice: {
+            age: 25,
+            height: 160,
+            weight: 46,
+            abc: false,
+            money: 5000,
+            email: "adweq@aa.cc"
+        },
+        John: {
+            age: 30,
+            height: 190,
+            weight: 100,
+            abc: { eee: "fff" },
+            money: 1000,
+            email: "kdwwk@aa.cc"
+        },
+        Mary: {
+            age: 33,
+            height: 155,
+            weight: 40,
+            abc: "String",
+            money: 10000,
+            email: "edqwd@aa.cc"
+        },
+        Jeff: {
+            age: 18,
+            height: 170,
+            weight: 55,
+            money: 12000,
+            email: "kqwdqw@aa.cc"
+        },
+        Patty: {
+            age: 28,
+            height: 156,
+            weight: 56,
+            abc: 5,
+            money: 20000,
+            email: "adaok@aa.cc"
+        },
+        Jack: {
+            age: 42,
+            height: 185,
+            weight: 80,
+            abc: true,
+            money: 2000,
+            email: "kda4dk@aa.cc"
+        }
+    }
+    database.ref("people").set(people);
+
+    //路徑 > 
+    var peopleRef = database.ref("people");
+    //orderByChild(指定排序的參數) 由小到大排序
+    //startAt 大於
+    //endAt 小於
+    //equalTo 指定值
+
+    // > 排序('key') > 過濾 > 限制筆數 > 讀取 > forEach依序撈出資料
+    peopleRef.orderByChild("email").equalTo("kqwdqw@aa.cc").once("value", (snapshot) => {
+    //peopleRef.orderByChild("money").startAt(10000).endAt(25000).once("value", (snapshot) => {
+        //forEach 讀出排序的資料
+        snapshot.forEach((item) => {
+            console.log(item.key);
+            console.log(item.val());
+        });
+    });
+
+
+
+</script>
+
+</html>
