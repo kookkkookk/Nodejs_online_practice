@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+</head>
+<style>
+    *, *:before, *:after{
+        margin: 0;
+        padding: 0;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    body, html{
+        position: relative;
+        width: 100%;
+        height: 100%;
+        font-family: Arial, "Microsoft JhengHei", "PMingLiU", "Arial Unicode MS", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -webkit-overflow-scrolling: touch;
+        -webkit-text-size-adjust: none;
+    }
+    .wrap{
+        width: 100%;
+        position: relative;
+    }
+    .bmiContent{
+        width: 1024px;
+        height: 300px;
+        background-color: #424242;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    .logo{
+        width: 30%;
+        height: 300px;
+        float: left;
+    }
+    .logo > div{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        font-size: 0;
+        align-items:center;
+        justify-content:center;
+    }
+    .inputContent{
+        width: 60%;
+        height: 300px;
+        float: left;
+
+        display: flex;
+        font-size: 0;
+        align-items: center;
+    }
+    .inputContent .inputField{
+        width: 40%;
+        /* background-color: pink; */
+    }
+    .inputContent .inputField > p{
+        font-size: 14px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        color: #FFD366;
+    }
+    .inputContent .inputField > input{
+        display: block;
+        width: 100%;
+        font-size: 14px;
+        padding: 5px;
+        border-radius: 5px;
+        border: 2px solid #FFD366;
+        background-color: #707070;
+        color: #FFF;
+    }
+    .inputContent .inputField > input::placeholder{
+        color: rgba(255, 255, 255, 0.685);
+    }
+
+    .sendBtn{
+        width: 100px;
+        height: 100px;
+        background-color: #FFD366;
+        border: 2px solid rgb(221, 170, 42);
+        border-radius: 50px;
+        line-height: 100px;
+        text-align: center;
+        margin-left: 40px;
+        font-size: 16px;
+        color: #424242;
+        cursor: pointer;
+    }
+
+</style>
+<body>
+    <div class="wrap">
+        <div class="bmiContent">
+            <div class="logo">
+                <div><img src="https://lh5.googleusercontent.com/Jx-BlUrTOL1BpUFOolURFvfndVtkplmzL5h7sc3uevvpVDj3Jv-2JldXTKFjt-GXQRHg8HK04Fv6kcAp_8Ds=w1920-h938" alt=""></div>
+            </div>
+            <div class="inputContent">
+                <div class="inputField">
+                    <p>身高cm</p>
+                    <input class="heightField" type="text" placeholder="請輸入身高 Only Number">
+                    <p>體重kg</p>
+                    <input class="weightField" type="text" placeholder="請輸入體重 Only Number">
+                </div>
+                <div class="sendBtn">看結果</div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    (function(){
+        let bodyHeight = 170;
+        let bodyWeight = 60;
+        let bodyHeightMeter = bodyHeight / 100;
+        let bodyBMI = bodyWeight / (bodyHeightMeter * bodyHeightMeter);
+
+        var roundingN = Math.pow(10, 1);
+        let bodyBMIOK = Math.round(bodyBMI * roundingN) / roundingN;
+
+        console.log(bodyBMIOK);
+
+        var heightField = document.querySelector(".heightField");
+        var weightField = document.querySelector(".weightField");
+        heightField.onchange = () => {
+            console.log(heightField.value);
+        }
+        
+    })();
+</script>
+</html>

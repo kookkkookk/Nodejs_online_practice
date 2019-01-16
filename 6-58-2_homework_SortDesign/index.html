@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase.js"></script>
+</head>
+<style>
+    .showList > li > p{
+        font-size: 14px;
+        line-height: 10px;
+    }
+    .showList > li > p:first-child{
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+</style>
+<body>
+    <div id="wrap">
+        <select class="typeSelect">
+            <option value="weight">體重排序</option>
+            <option value="age">歲數排序</option>
+            <option value="height">身高排序</option>
+        </select>
+        <ul class="showList"></ul>
+    </div>
+    <br/>
+    <div>------- Show firebase data (All) --------</div>
+    <!-- <pre> 標籤是顯示所有空白換行等 -->
+    <pre id="showFirebaseData"></pre>
+    
+</body>
+<script>
+    (function(){
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyD7YAdZUxa4BcIxC9LOBrKDifehFgXAMWY",
+            authDomain: "nodejspractice-ef537.firebaseapp.com",
+            databaseURL: "https://nodejspractice-ef537.firebaseio.com",
+            projectId: "nodejspractice-ef537",
+            storageBucket: "nodejspractice-ef537.appspot.com",
+            messagingSenderId: "418780553811"
+        };
+        firebase.initializeApp(config);
+        var database = firebase.database();
+        var ref = firebase.database().ref();
+        var refTodos = firebase.database().ref("todos");
+
+        //Show firebase in screen
+        /*ref.on("value", (snapshot) => {
+            var preTag = document.getElementById("showFirebaseData");
+            //從根目錄取出data Obj
+            //將Obj 轉成Str (JSON.stringify) 在用 參數3設定間距3 
+            preTag.textContent = JSON.stringify(snapshot.val(), null, 3);
+        });*/
+
+        //假如目前已有以下資料
+        var people = {
+            "mom":{
+                "title": "mom",
+                "age": 42,
+                "weight": 66,
+                "height": 166
+            },
+            "father":{
+                "title": "father",
+                "age": 44,
+                "weight": 88,
+                "height": 178
+            },
+            "daughter":{
+                "title": "daughter",
+                "age": 8,
+                "weight": 35,
+                "height": 110
+            },
+            "son":{
+                "title": "son",
+                "age": 13,
+                "weight": 40,
+                "height": 133
+            },
+            "grandfather":{
+                "title": "grandfather",
+                "age": 65,
+                "weight": 78,
+                "height": 170
+            },
+            "grandmother":{
+                "title": "grandmother",
+                "age": 63,
+                "weight": 58,
+                "height": 158
+            },
+        }
+        database.ref("people").set(people);
+
+        var peopleRef = database.ref("people");
+
+        var listHTML = '';
+        var reverseListAry = [];
+
+        var typeSelect = document.querySelector(".typeSelect");
+        var typeSelectVal = typeSelect.value;
+        console.log("first: ",typeSelectVal);
+        
+        
+        typeSelect.onchange = ()=>{
+            if(typeSelectVal === typeSelect.value) return;
+            listHTML = '';
+            reverseListAry.length = 0;
+
+            typeSelectVal = typeSelect.value;
+            //console.log(typeSelectVal);
+
+            pasteHTML(typeSelectVal);
+        }
+        pasteHTML(typeSelectVal);
+
+        function pasteHTML(_val){
+
+            //orderByChild(指定排序的參數) 由小到大排序
+            peopleRef.orderByChild(_val).once("value", (snapshot)=>{
+
+                snapshot.forEach((item)=>{
+                    //console.log(item.val());
+                    reverseListAry.push(item.val());
+                });
+            });
+
+            reverseListAry.reverse();
+            console.log("reverseListAry: ",reverseListAry);
+
+            for(var item in reverseListAry){
+                listHTML += `<li><p>${reverseListAry[item].title}</p><p>年齡: ${reverseListAry[item].age}</p> <p>身高: ${reverseListAry[item].height}</p> <p>體重: ${reverseListAry[item].weight}</p></li>`;
+            }
+            document.querySelector(".showList").innerHTML = listHTML;
+        }
+    })();
+</script>
+</html>
