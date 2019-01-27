@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase.js"></script>
 </head>
 <style>
     *, *:before, *:after{
@@ -27,6 +28,7 @@
     .wrap{
         width: 100%;
         position: relative;
+        float: left;
     }
     .bmiContent{
         width: 1024px;
@@ -95,12 +97,57 @@
         cursor: pointer;
     }
 
+    .resultList{
+        margin-top: 20px;
+        overflow: hidden;
+        height: auto;
+        background-color: #fff;
+    }
+    .resultList > div{
+        margin-bottom: 10px;
+        overflow: hidden;
+        background-color: #424242;
+    }
+    .resultList .outputField{
+        font-size: 14px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        padding: 5px;
+        border-radius: 5px;
+        border: 2px solid rgb(90, 90, 90);
+        background-color: #707070;
+        color: rgb(192, 192, 192);
+    }
+    .resultList .bmiResult{
+        width: 100px;
+        height: 100px;
+        background-color: #424242;;
+        border: 4px solid green;
+        border-radius: 50px;
+        text-align: center;
+        margin-left: 40px;
+        font-size: 16px;
+        color: green;
+
+        line-height: 30px;
+    }
+    .resultList .bmiResult .bmiN{
+        margin-top: 20px;
+        font-size: 26px;
+    }
+    .resultList .comment{
+        font-size: 24px;
+        color: green;
+        margin-left: 20px;
+        font-weight: bold;
+    }
+
 </style>
 <body>
     <div class="wrap">
         <div class="bmiContent">
             <div class="logo">
-                <div><img src="https://lh5.googleusercontent.com/Jx-BlUrTOL1BpUFOolURFvfndVtkplmzL5h7sc3uevvpVDj3Jv-2JldXTKFjt-GXQRHg8HK04Fv6kcAp_8Ds=w1920-h938" alt=""></div>
+                <div><img src="BMICLogo.png" alt="BMICLogo"></div>
             </div>
             <div class="inputContent">
                 <div class="inputField">
@@ -112,26 +159,163 @@
                 <div class="sendBtn">看結果</div>
             </div>
         </div>
+
+        <div class="resultList bmiContent">
+            <!-- <div>
+                <div class="logo">
+                    <div><img src="BMICLogo.png" alt="BMICLogo"></div>
+                </div>
+                <div class="inputContent">
+                    <div class="inputField">
+                        <p>身高cm</p>
+                        <div class="outputField">180</div>
+                        <p>體重kg</p>
+                        <div class="outputField">70</div>
+                    </div>
+                    <div class="bmiResult">
+                        <p class="bmiN">22.1</p>
+                        <p>BMI</p>
+                    </div>
+                    <div class="comment">良好</div>
+                </div>
+            </div> -->
+
+        </div>
     </div>
+
+    <div>------- Show firebase data (All) --------</div>
+    <pre id="showFirebaseData"></pre>
 </body>
 <script>
     (function(){
-        let bodyHeight = 170;
-        let bodyWeight = 60;
-        let bodyHeightMeter = bodyHeight / 100;
-        let bodyBMI = bodyWeight / (bodyHeightMeter * bodyHeightMeter);
+        // Initialize Firebase
+        const config = {
+            apiKey: "AIzaSyD7YAdZUxa4BcIxC9LOBrKDifehFgXAMWY",
+            authDomain: "nodejspractice-ef537.firebaseapp.com",
+            databaseURL: "https://nodejspractice-ef537.firebaseio.com",
+            projectId: "nodejspractice-ef537",
+            storageBucket: "nodejspractice-ef537.appspot.com",
+            messagingSenderId: "418780553811"
+        };
+        firebase.initializeApp(config);
+        const database = firebase.database();
+        var ref = firebase.database().ref();
+        var refBmiTodos = firebase.database().ref("bmiTodos");
 
-        var roundingN = Math.pow(10, 1);
-        let bodyBMIOK = Math.round(bodyBMI * roundingN) / roundingN;
+        //Show firebase in screen
+        refBmiTodos.on("value", (snapshot) => {
+            var preTag = document.getElementById("showFirebaseData");
+            //從根目錄取出data Obj
+            //將Obj 轉成Str (JSON.stringify) 在用 參數3設定間距3 
+            preTag.textContent = JSON.stringify(snapshot.val(), null, 3);
+        });
 
-        console.log(bodyBMIOK);
+        var listHTML = '';
+        var reverseListAry = [];
+        var pasteHtmlList = ()=>{
+
+            refBmiTodos.once("value", (snapshot)=>{
+                snapshot.forEach((item)=>{
+                    console.log(item.val());
+                    reverseListAry.push(item.val());
+                });
+                reverseListAry.reverse();
+                console.log("reverseListAry: ",reverseListAry);
+
+                for(var item in reverseListAry){
+                    listHTML += `
+                    <div>
+                        <div class="logo"><div><img src="BMICLogo.png" alt="BMICLogo"></div></div>
+                        <div class="inputContent">
+                            <div class="inputField">
+                                <p>身高cm</p>
+                                <div class="outputField">${reverseListAry[item].bodyHeight}</div>
+                                <p>體重kg</p>
+                                <div class="outputField">${reverseListAry[item].bodyWeight}</div>
+                            </div>
+                            <div class="bmiResult" style="border:4px solid ${reverseListAry[item].commentColor}">
+                                <p class="bmiN" style="color:${reverseListAry[item].commentColor}">${reverseListAry[item].bodyBMI}</p>
+                                <p style="color:${reverseListAry[item].commentColor}">BMI</p>
+                            </div>
+                            <div class="comment" style="color:${reverseListAry[item].commentColor}">${reverseListAry[item].commentText}</div>
+                        </div>
+                    </div>
+                    `;
+                }
+                console.log("listHTML: ",listHTML);
+                
+                document.querySelector(".resultList").innerHTML = listHTML;
+            });
+        }
+        var computeBMI = (bodyHeight,bodyWeight)=>{
+            var bodyHeightMeter = bodyHeight / 100;
+            var bodyBMI = bodyWeight / (bodyHeightMeter * bodyHeightMeter);
+
+            var roundingN = Math.pow(10, 1);
+            var bodyBMIOK = Math.round(bodyBMI * roundingN) / roundingN;
+            console.log(bodyBMIOK);
+
+            var commentColor,commentText;
+            switch(true) {
+                case bodyBMIOK < 18.5:
+                    commentColor = "blue";
+                    commentText = "過輕";
+                    break;
+                case bodyBMIOK >= 18.5 && bodyBMIOK < 24:
+                    commentColor = "green";
+                    commentText = "良好";
+                    break;
+                case bodyBMIOK >= 24 && bodyBMIOK < 27:
+                    commentColor = "#FF982D";
+                    commentText = "過重";
+                    break;
+                case bodyBMIOK >= 27 && bodyBMIOK < 30:
+                    commentColor = "#FF6C03";
+                    commentText = "輕度肥胖";
+                    break;
+                case bodyBMIOK >= 30 && bodyBMIOK < 35:
+                    commentColor = "#FF4405";
+                    commentText = "中度肥胖";
+                    break;
+                case bodyBMIOK >= 35:
+                    commentColor = "red";
+                    commentText = "重度肥胖";
+                    break;
+                default:
+            }
+            //console.log(commentColor);
+            //console.log(commentText);
+            
+            //push firebase
+            listHTML = '';
+            reverseListAry.length = 0;
+            refBmiTodos.push( {bodyHeight:bodyHeight, bodyWeight:bodyWeight, bodyBMI:bodyBMIOK, commentColor:commentColor, commentText:commentText} );
+            pasteHtmlList();
+        }
 
         var heightField = document.querySelector(".heightField");
         var weightField = document.querySelector(".weightField");
-        heightField.onchange = () => {
-            console.log(heightField.value);
+        var sendBtn = document.querySelector(".sendBtn");
+        heightField.onkeyup = () => {
+            heightField.value = heightField.value.replace(/[^\0-9.]/g, '');
         }
+        weightField.onkeyup = () => {
+            weightField.value = weightField.value.replace(/[^\0-9.]/g, '');
+        }
+
+        sendBtn.addEventListener("click",(e)=>{
+            if(heightField.value.length<=0 || weightField.value.length<=0){
+                alert("請輸入身高體重");
+                return false;
+            }else if(heightField.value.split(".").length>=3 || weightField.value.split(".").length>=3){
+                alert("身高體重格式錯誤");
+                return false;
+            }
+            
+            computeBMI(heightField.value, weightField.value);
+        });
         
+        pasteHtmlList();
     })();
 </script>
 </html>
