@@ -1,0 +1,27 @@
+{
+  "name": "udemy_nodejs",
+  "version": "0.0.1",
+  "description": "Udemy nodejs education",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kookkkookk/Nodejs_online_practice.git"
+  },
+  "author": "Ben Wu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kookkkookk/Nodejs_online_practice/issues"
+  },
+  "homepage": "https://github.com/kookkkookk/Nodejs_online_practice#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "ejs-locals": "^1.0.2",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "firebase-admin": "^7.0.0"
+  }
+}

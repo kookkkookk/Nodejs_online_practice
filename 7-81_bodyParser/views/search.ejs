@@ -1,0 +1,11 @@
+<% layout('layout') %>
+
+<!-- action="/searchList" 指傳送資料到哪一個頁面 -->
+<!-- method="post" 使用什麼模式 -->
+<form action="/searchList" method="post">
+
+    <!-- 這邊這個 name="searchText" 很重要，是後端get後的key name-->
+    <input type="text" name="searchText" value="">
+    <input type="text" name="Title" value="">
+    <input type="submit" value="Send">
+</form>

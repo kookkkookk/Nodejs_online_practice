@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    console.log(document.cookie);
+
+    //寫入一個cookie
+    document.cookie="myName=ben";
+
+    //寫入cookie並加入過期時間
+    var gmtDate = new Date().toGMTString();
+    console.log(gmtDate);
+    document.cookie="username=ben; expires=Thu, 07 Feb 2019 17:23:53 GMT; path=/";
+
+    //加入一筆一陣子就會過期的cookie (範例是10秒)
+    document.cookie="username1=ben; max-age=10; path=/";
+    
+</script>
+</html>

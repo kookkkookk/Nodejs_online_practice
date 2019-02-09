@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <input type="text" name="content" id="content">
+        <input type="submit" id="send" value="Send">
+    </div>
+</body>
+<script>
+    let send = document.getElementById("send");
+    let content = document.getElementById("content");
+
+    send.addEventListener("click", (e)=>{
+        e.preventDefault();
+        let str = content.value;
+        console.log("content.value: ",str);
+
+        //開啟 XMLHttpRequest 功能 (AJAX)
+        const xhr = new XMLHttpRequest();
+        //使用格式為Post 傳送至/searchAJAX
+        xhr.open("post", "/searchAJAX");
+        //設定RequestHeader (瀏覽器Network可查看) 使用傳送格式JSON
+        //json = json格式
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        //使用json格式傳送，需要將json使用JSON.stringify()轉成json str
+        //let data = JSON.stringify({"content": str});
+        //也可以傳送多組
+        let data = JSON.stringify({"content": str, "list": [1,2,3]});
+        xhr.send(data);
+
+        //接收回傳資料
+        xhr.onload = ()=>{
+            console.log(xhr.responseText);
+        }
+    });
+
+</script>
+</html>

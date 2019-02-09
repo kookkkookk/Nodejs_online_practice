@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 將post至後端包裝成session資料回傳自前端顯示 -->
+    <h1><%= userName %> <%= eMail %></h1>
+
+    <!-- form post 設計, 將User填入的資料Post到後端 -->
+    <form method="post" action="/">
+        <input type="text" name="username" value="">
+        <input type="text" name="email" value="">
+        <input type="submit" value="Send">
+    </form>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <input type="text" name="content" id="content">
+        <input type="submit" id="send" value="Send">
+    </div>
+</body>
+<script>
+    let send = document.getElementById("send");
+    let content = document.getElementById("content");
+
+    send.addEventListener("click", (e)=>{
+        e.preventDefault();
+        let str = content.value;
+        console.log("content.value: ",str);
+
+        //開啟 XMLHttpRequest 功能 (AJAX)
+        const xhr = new XMLHttpRequest();
+        //使用格式為Post 傳送至/searchAJAX
+        xhr.open("post", "/searchAJAX");
+        //設定RequestHeader (瀏覽器Network可查看) 使用傳送格式x-www-form-urlencoded
+        //x-www-form-urlencoded = 表單文字格式
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        //傳送的格式為 name=val 
+        //如果要傳送兩組以上 name=val&name2=val2&name3=val3  以此類推
+        let data = 'content=' + str;
+        xhr.send(data);
+
+        //接收回傳資料
+        xhr.onload = ()=>{
+            console.log(xhr.responseText);
+        }
+    });
+
+</script>
+</html>

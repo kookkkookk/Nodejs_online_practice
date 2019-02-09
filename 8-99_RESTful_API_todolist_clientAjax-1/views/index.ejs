@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>代辦事項列表</h1>
+    <input type="text" name="content" id="content">
+    <input type="submit" value="Send" id="send">
+    <ul id="list">
+        <% for(item in todolist){ %>
+            <li><%= todolist[item].content %> <input type="button" name="" value="Del"></li>
+        <% } %>
+    </ul>
+</body>
+
+<script>
+//宣告 content send list
+let content = document.getElementById("content");
+let send = document.getElementById("send");
+let list = document.getElementById("list");
+
+//送出 click Fn
+send.addEventListener('click',(e)=>{
+    e.preventDefault();
+    //User輸入的值
+    let str = content.value;
+    console.log("str: ",str);
+
+    //Ajax
+    const xhr = new XMLHttpRequest();
+    xhr.open("post", "/addTodo");
+    //使用json傳送格式
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    //將格式轉Json字串
+    let todo = JSON.stringify({"content":str});
+    //post to /addTodo
+    xhr.send(todo);
+
+    //接回傳
+    xhr.onload = ()=>{
+        //接到回傳json字串格式 轉json
+        let originData = JSON.parse(xhr.responseText);
+        console.log("originData: ",originData);
+
+        //防呆 如果後端回覆success:false 即失敗
+        if(originData.success === false){
+            alert(origin.msg);
+            return;
+        }
+        
+        //讀取originData.result內的資料
+        let data = originData.result;
+        //組字串 rander 畫面
+        let str = '';
+        for(item in data){
+            str += `<li>${data[item].content}</li>`;
+        }
+        list.innerHTML = str;
+    }
+});
+</script>
+</html>
