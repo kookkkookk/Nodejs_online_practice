@@ -7,13 +7,30 @@
 </head>
 <body>
 	<h1>留言板</h1>
+	
+	<% if(!auth){ %>
+	<!--這段是給沒登入的人看到的-->
+	<p>您尚未登入。所以只能瀏覽、若要留言請先登入。</p>
+	<% } %>
+	
+	<% if(auth){ %>
+	<!--登入後才能使用留言功能-->
 	<form action="/messageBoard" method="post">
 		<input type="text" name="content" placeholder="填寫留言訊息">
 		<input type="submit" valut="送出">
 	</form>
+	<% } %>
+
+	<% if(!auth){ %>
+	<!--這段是給沒登入的人看到的-->
 	<a href="/login">登入</a>
 	<a href="/signup">註冊</a>
-		<a href="/user">個人頁面</a>
+	<% } %>
+	
+	<% if(auth){ %>
+	<!--登入後才有個人頁面-->
+	<a href="/user">個人頁面</a>
+	<% } %>
 	<ul>
 			<li>
 				姓名 : 留言內容

@@ -34,7 +34,7 @@ router.post('/', function (req, res) {
         //存放更多該User的額外資訊至firebaseDb (12-132)
         var saveUser = {
             'email': email,
-            'nikename': nickname,
+            'nickname': nickname,
             'age': age,
             'uid': user.uid
         }
