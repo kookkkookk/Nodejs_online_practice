@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    var runPromise = function(who, timer, isSuccess){
+        console.log(who + '開始奔跑');
+        
+        //開始自定義Promise
+        //使用Promise 會有要使用 resolve(成功), 或reject 去接收再執行
+        //這兩個key雖然是自定義名稱，但業界都使用這樣 所以建議使用該名稱
+        return new Promise(function(resolve, reject){
+            if(isSuccess){
+                setTimeout(function() {
+                    resolve(who + ' ' + (timer/1000) + '秒 抵達終點');
+                }, timer);
+            }else{
+                reject(new Error(who + '失敗'));
+            }
+        })
+    }
+
+    //一般使用Function只是單純丟入val即可，這邊使用已經自定義好的Promise 之後繼續接.then & .catch
+    runPromise('小明', 2000, true)
+    .then(function(response){
+        //Promise 如果執行resolve 回傳至此
+        console.log(response);
+        return runPromise('胖虎', 3000, true)
+    })
+    .then(function (response) {
+        //Promise 如果執行resolve 回傳至此
+        console.log(response);
+        return runPromise('靜香', 1000, true)
+    })
+    .then(function (response) {
+        //Promise 如果執行resolve 回傳至此
+        console.log(response);
+    })
+    .catch(function(response){
+        //Promise 如果執行reject 回傳至此
+        console.log(response);
+    })
+</script>
+</html>

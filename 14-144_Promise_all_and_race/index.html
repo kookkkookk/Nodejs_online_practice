@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    var runPromise = function (who, timer, isSuccess) {
+        console.log(who + '開始奔跑');
+
+        //開始自定義Promise
+        //使用Promise 會有要使用 resolve(成功), 或reject 去接收再執行
+        //這兩個key雖然是自定義名稱，但業界都使用這樣 所以建議使用該名稱
+        return new Promise(function (resolve, reject) {
+            if (isSuccess) {
+                setTimeout(function () {
+                    resolve(who + ' ' + (timer / 1000) + '秒 抵達終點');
+                }, timer);
+            } else {
+                reject(new Error(who + '失敗'));
+            }
+        })
+    }
+
+    //使用 Promise.all 可以將要同時進行Promise Fn 的放在陣列中同時執行
+    //Promise.all 回傳比較不同的是，會等最後一個執行完畢後，在一起回傳陣列格式。
+    /*Promise.all([runPromise('小明', 2000, true), runPromise('胖虎', 3000, true)])
+    .then(function(response){
+        //console.log(response);
+        console.log(response[0]);
+        console.log(response[1]);
+    })
+    .catch(function(response){
+        console.log(response);
+    });*/
+
+    //這這例子是，小明先執行Promise, 接著胖虎與靜香同時執行
+    /*runPromise('小明', 2000, true)
+    .then(function (response) {
+        console.log(response);
+        return Promise.all([runPromise('胖虎', 3000, true), runPromise('靜香', 1000, true)])
+    })
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (response) {
+        console.log(response);
+    })*/
+
+    //Promise.race 與.all很像，可以同時執行多比。但最後只會回傳裡面最快完成的 (執行時間也是最快的直接回傳，不等待其他的)
+    Promise.race([runPromise('小明', 2000, true), runPromise('胖虎', 5000, true)])
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (response) {
+        console.log(response);
+    });
+    
+</script>
+
+</html>
