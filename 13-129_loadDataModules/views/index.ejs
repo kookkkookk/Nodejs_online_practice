@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+    <%= title %>
+  </title>
+</head>
+<body>
+	<h1>留言板</h1>
+	
+	<% if(!auth){ %>
+	<!--這段是給沒登入的人看到的-->
+	<p>您尚未登入。所以只能瀏覽、若要留言請先登入。</p>
+	<% } %>
+	
+	<% if(auth){ %>
+	<!--登入後才能使用留言功能-->
+	<form action="/messageBoard" method="post">
+		<input type="text" name="content" placeholder="填寫留言訊息">
+		<input type="submit" valut="送出">
+		<%= errors %>
+	</form>
+	<% } %>
+
+	<% if(!auth){ %>
+	<!--這段是給沒登入的人看到的-->
+	<a href="/login">登入</a>
+	<a href="/signup">註冊</a>
+	<% } %>
+	
+	<% if(auth){ %>
+	<!--登入後才有個人頁面-->
+	<a id="logout" href="javascript:;">登出</a>
+	<a href="/user">個人頁面</a>
+	<% } %>
+
+	<ul>
+		<!--取得index.js firesbaseDb裡 path list留言資訊並顯示-->
+		<% for(item in list){ %>
+			<li>
+				<%= list[item].nickname %> : <%= list[item].content %>
+			</li>
+		<% } %>
+	 </ul>
+</body>
+</html>
