@@ -13,21 +13,24 @@
         </tr>
       </thead>
       <tbody>
-        
+        使用.ejs router.get('/categories'.. render過來的資訊
+        <% for(var prop in categories){ %>
           <tr>
-            <td class="align-middle">心得</td>
-            <td><input type="text" class="form-control form-control-sm" value="mind"></td>
+            <!-- 取出categories[i]的name -->
+            <td class="align-middle"><%- categories[prop].name %></td>
+            <!-- 取出categories[i]的path -->
+            <td><input type="text" class="form-control form-control-sm" value="<%- categories[prop].path %>"></td>
             <td class="align-middle">
               <form method="POST">
                 <button type="submit" class="btn btn-outline-danger btn-sm">刪除</button>
               </form>
             </td>
           </tr>
-        
+        <% } %>
       </tbody>
     </table>
 
-    <form method="POST">
+    <form action="/dashboard/categories/create" method="POST">
       <table class="table">
         <tr>
           <td class="align-middle">新增</td>
