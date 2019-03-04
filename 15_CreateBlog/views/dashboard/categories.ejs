@@ -2,8 +2,15 @@
 
 <div class="row justify-content-center">
   <div class="col-md-6">
-    
-    
+    <% if(hasInfo){ %>
+      <!-- 這邊就能利用 dashboard get categories 傳過來的 Boolean是否要開啟此訊息 -->
+      <% for(var prop in message){ %>
+        <!-- 這個是bootstrap套件class -->
+        <div class="alert alert-warning">
+          <%- message[prop] %>
+        </div>
+      <% } %>
+    <% } %>
     <table class="table">
       <thead>
         <tr>
@@ -13,15 +20,16 @@
         </tr>
       </thead>
       <tbody>
-        使用.ejs router.get('/categories'.. render過來的資訊
+        <!-- 使用.ejs router.get('/categories'.. render過來的資訊 -->
         <% for(var prop in categories){ %>
           <tr>
-            <!-- 取出categories[i]的name -->
+            <!-- 取出categories[id]的name -->
             <td class="align-middle"><%- categories[prop].name %></td>
-            <!-- 取出categories[i]的path -->
+            <!-- 取出categories[id]的path -->
             <td><input type="text" class="form-control form-control-sm" value="<%- categories[prop].path %>"></td>
             <td class="align-middle">
-              <form method="POST">
+              <!-- 塞入categories[id]給刪除按鈕當作指定編號 -->
+              <form action="/dashboard/categories/delete/<%- prop %>" method="POST">
                 <button type="submit" class="btn btn-outline-danger btn-sm">刪除</button>
               </form>
             </td>

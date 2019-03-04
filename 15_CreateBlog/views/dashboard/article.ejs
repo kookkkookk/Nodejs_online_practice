@@ -1,6 +1,7 @@
 <% extend('../layout/dashboard-layout') %>
 
 <form 
+  action="/dashboard/article/create"
   method="POST" 
   class="row justify-content-center">
   <div class="col-md-6">
@@ -23,7 +24,7 @@
       <h6 class="card-header">分類</h6>
       <div class="card-body">
         
-          <div class="form-check">
+          <!-- <div class="form-check">
             <label class="form-check-label">
               <input class="form-check-input" type="radio" name="category" required value="-L2TajOWL1ycB_hwyiK-">
               心得
@@ -42,8 +43,16 @@
               <input class="form-check-input" type="radio" name="category" required value="-L3VkF87JcRmUUjxhi0g">
               新聞
             </label>
-          </div>
-        
+          </div> -->
+          <!-- Get Categories 過來的文章分類 & Categories id -->
+          <% for(prop in categories){ %>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="category" required value="<%- prop %>">
+                <%- categories[prop].name %>
+              </label>
+            </div>
+          <% } %>
       </div>
     </div>
 
