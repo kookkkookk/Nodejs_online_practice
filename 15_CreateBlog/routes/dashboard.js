@@ -26,6 +26,28 @@ router.get('/article/create', function (req, res, next) {
     })
 });
 
+//article創建完成後，再度返回到該頁，但是是Firebase push()出來後的頁面
+router.get('/article/:id', function (req, res, next) {
+    const id = req.param('id');
+    //console.log("id: ",id);
+    let categories = {};
+
+    //這邊要使用ES6 Promise 第一次once取 categories
+    //完成後.then() 再利用id取得 articlesRef 裡的 article
+    categoriesRef.once('value').then(function (snapshot) {
+        categories = snapshot.val();
+        return articlesRef.child(id).once('value');
+    }).then(function(snapshot){
+        const article = snapshot.val();
+        //console.log("article: ",article);
+        res.render('dashboard/article', {
+            //最後將categories 與 該id的article 帶入.ejs
+            categories,
+            article
+        });
+    })
+});
+
 //Get preview page 建立新的文章分類 (列表區)
 router.get('/categories', function (req, res, next) {
     //message = connect-flash暫存 session
@@ -65,7 +87,21 @@ router.post('/article/create', function(req, res){
     //將data set至push()產生的位置
     articleRef.set(data).then(function(){
         //轉址
-        res.redirect('/dashboard/article/create');
+        res.redirect(`/dashboard/article/${key}`);
+    })
+})
+
+//更新文章
+router.post('/article/update/:id', function (req, res) {
+    //req.body接收ejs User post過來的form資訊
+    //console.log(req.body);
+    const data = req.body;
+    const id = req.param('id');
+    console.log("article/update: ",data);
+    //由於是更新，這裡改成使用articlesRef裡面id 然後update(data) 整個覆蓋更新
+    articlesRef.child(id).update(data).then(function () {
+        //再重新轉址到目前id
+        res.redirect(`/dashboard/article/${id}`);
     })
 })
 
