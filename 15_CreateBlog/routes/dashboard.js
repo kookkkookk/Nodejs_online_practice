@@ -1,5 +1,9 @@
 var express = require('express');
 var router = express.Router();
+//stringtags 為可以將Htmp String化
+const stringtags = require('striptags');
+//moment 可以將時間做格式切換
+const moment = require('moment');
 
 var firebaseAdminDb = require('../connections/firebase_admin');
 
@@ -9,7 +13,40 @@ const categoriesRef = firebaseAdminDb.ref('/categories/');
 const articlesRef = firebaseAdminDb.ref('/articles/');
 
 router.get('/archives', function (req, res, next) {
-    res.render('dashboard/archives', { title: 'Express' });
+    //get url ?status val, 如果沒有取得則=public
+    const status = req.query.status || 'public';
+    //console.log(status);
+
+    //取得Firebase categories
+    let categories = {};
+    categoriesRef.once('value').then(function(snapshot){
+        categories = snapshot.val();
+        //orderByChild 排序(詳細可以查看6-51)
+        return articlesRef.orderByChild('update_time').once('value');
+
+        //ES6 promise 取得完categories後 .then() 要取得articles
+    }).then(function(snapshot){
+        //這邊因為要將每一個文章做pages list 所以要將article 塞入articles[]
+        const articles = [];
+        //使用Firebase forEach方法
+        snapshot.forEach(function(snapshotChild){
+            //這邊就判斷目前是哪一個status 就只塞那一類的article
+            if (status === snapshotChild.val().status){
+                //將每一筆article data 塞入ary
+                articles.push(snapshotChild.val());
+            }
+        })
+        //做反轉排序，因為Firebase是將新資料往下塞，但顯示上要將新的呈現在上
+        articles.reverse();
+        //console.log(categories, articles);
+        res.render('dashboard/archives', {
+            articles,
+            categories,
+            stringtags,
+            moment,
+            status
+        });
+    })
 });
 
 //Get preview page 建立新的文章 (Detial)
@@ -104,6 +141,18 @@ router.post('/article/update/:id', function (req, res) {
         res.redirect(`/dashboard/article/${id}`);
     })
 })
+
+//使用Ajax POST傳送過來刪除文章
+router.post('/article/delete/:id', function (req, res) {
+    const id = req.param('id');
+    console.log('delete id: ', id);
+    //刪除Firebase articles裡的id data
+    articlesRef.child(id).remove();
+    req.flash('info', '文章已刪除');
+    //回傳給前端Ajax response
+    res.send('文章已刪除');
+    res.end();
+});
 
 //建立新的文章分類 (列表區)
 router.post('/categories/create', function(req, res){
