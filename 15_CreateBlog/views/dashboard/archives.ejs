@@ -25,9 +25,11 @@
             ,
             <span class="fa fa-folder-open-o"></span>
             <span>
-              
+              <% if(categories.hasOwnProperty(articles[prop].category)){ %>
+                <%= categories[articles[prop].category].name %>
+              <% }else{ %>
                 沒有分類
-              
+              <% } %>
             </span>
           </div>
         </div>
