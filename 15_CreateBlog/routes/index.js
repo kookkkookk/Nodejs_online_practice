@@ -6,6 +6,8 @@ var firebaseAdminDb = require('../connections/firebase_admin');
 //stringtags 為可以將Htmp String化
 const stringtags = require('striptags');
 
+const convertPagination = require('../modules/convertPagination');
+
 //指定一個Firebase路徑 (categories 文章分類)
 const categoriesRef = firebaseAdminDb.ref('/categories/');
 //指定一個Firebase路徑 (articles) 建立文章)
@@ -18,8 +20,8 @@ var firebaseAdminDb = require('../connections/firebase_admin');
 /* GET home page. */
 router.get('/', function (req, res, next) {
 
-  //取得前端?page=x 當前頁
-  let currentPage = req.query.page || 1;
+  //取得前端?page=x 當前頁 (注意 由於前端點prev&next 上下頁是使用+1-1 後端傳過去的page.current為字串，所以這邊Get 轉Number)
+  let currentPage = Number.parseInt(req.query.page) || 1;
 
   //取得Firebase categories
   let categories = {};
@@ -43,45 +45,14 @@ router.get('/', function (req, res, next) {
     //做反轉排序，因為Firebase是將新資料往下塞，但顯示上要將新的呈現在上
     articles.reverse();
 
-
+    const data = convertPagination(articles, currentPage);
+    console.log('convert pagination js: ', data);
     
-    //分頁功能
-    const totalResult = articles.length;//總公開資料量
-    const perpage = 3;//設定每頁顯示三筆資料
-    const pageTotal = Math.ceil(totalResult / perpage);//依每頁顯示數量，算出總頁數
-    //User指定的頁數不可超過總頁數
-    if (currentPage > pageTotal) currentPage = pageTotal;
-
-    //算出User輸入的當前頁，所要顯示的第幾筆資料到第幾筆 ps. 第二頁= articles的4~6
-    const minItem = (currentPage * perpage) - perpage + 1;
-    let maxItem = currentPage * perpage;
-    //如果最後一筆為遺留不滿perpage 不可超過總公開資料量
-    if (maxItem > totalResult) maxItem = totalResult;
-    console.log('總公開資料量:' + totalResult + ',每頁數量:' + perpage + ',總頁數:' + pageTotal + '. ' + minItem + ' ' + maxItem);
-
-    //要顯示傳入的data
-    const data = [];
-    articles.forEach(function(item, i){
-      let itemNum = i+1;
-      if (itemNum >= minItem && itemNum <= maxItem){
-        //console.log(item.title, i)
-        data.push(item);
-      }
-    })
-    //這邊把一些值丟給前端做pagination
-    const page = {
-      pageTotal,
-      perpage,
-      hasPre: currentPage > 1,
-      hasNext: currentPage > pageTotal
-    }
-    
-
     //console.log(categories, articles);
     res.render('index', {
-        articles: data,//這個就不能傳入article了 要改成設定好要顯示的data
+        articles: data.data,//這個就不能傳入article了 要改成設定好要顯示的data
         categories,
-        page,
+        page: data.page,
         stringtags,
         moment
     });
@@ -101,6 +72,14 @@ router.get('/post/:id', function (req, res, next) {
   }).then(function(snapshot){
       const article = snapshot.val();
       //console.log("article: ",article);
+
+      //例外判斷要是沒有該article id 或User亂修改URL articel id 導向error頁面
+      if (!article){
+        return res.render('error', {
+          title: '找不到該文章'
+        })
+      }
+
       res.render('post', {
           categories,
           article,

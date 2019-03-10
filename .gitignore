@@ -8,3 +8,4 @@ app
 other/*
 backup_oldFn/*
 .env
+*.tmp
