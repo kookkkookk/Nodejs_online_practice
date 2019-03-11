@@ -12,6 +12,15 @@ const categoriesRef = firebaseAdminDb.ref('/categories/');
 //指定一個Firebase路徑 (articles) 建立文章)
 const articlesRef = firebaseAdminDb.ref('/articles/');
 
+router.get('/', (req, res) => {
+    const messages = req.flash('error');
+    res.render('dashboard/index', {
+        title: 'Express',
+        currentPath: '/',
+        hasErrors: messages.length > 0,
+    });
+});
+
 router.get('/archives', function (req, res, next) {
     //get url ?status val, 如果沒有取得則=public
     const status = req.query.status || 'public';
